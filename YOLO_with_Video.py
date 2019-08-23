@@ -213,18 +213,18 @@ def predict(sess, image_file):
 #%%
 # running the predict function
 cap = cv2.VideoCapture(1)
-d = 0
+
 while True:
-    d = d+1
+    
     ret, frame = cap.read()
     image,out_scores, out_boxes, out_classes,colors,image_file = predict(sess, frame)
+    image = cv2.resize(image,(1280,720),interpolation = cv2.INTER_CUBIC)
     
-    # ===== Under Some implemental Changes =======
-    #image_o = draw_boxes(image, out_scores, out_boxes, out_classes, class_names, colors)
-    # ============================================
+    draw_boxes(image, out_scores, out_boxes, out_classes, class_names, colors)
+    
     
     cv2.imshow("output",image)
-    # d = d+1
+    
     
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
@@ -234,3 +234,4 @@ cap.release()
 cv2.destroyAllWindows()
 
 #%%
+
