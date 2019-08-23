@@ -218,6 +218,7 @@ while True:
     
     ret, frame = cap.read()
     image,out_scores, out_boxes, out_classes,colors,image_file = predict(sess, frame)
+    # resizing back to the original input resolution of the web camera
     image = cv2.resize(image,(1280,720),interpolation = cv2.INTER_CUBIC)
     
     draw_boxes(image, out_scores, out_boxes, out_classes, class_names, colors)
