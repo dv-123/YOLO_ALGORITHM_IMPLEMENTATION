@@ -46,49 +46,20 @@ def preprocess_image(img_input, model_image_size):
     image_data /= 255.
     image_data = np.expand_dims(image_data, 0)  # Add batch dimension.
     return image, image_data
-#%%
-# ====== Under Some Implemental Changes ======
+
 def draw_boxes(image, out_scores, out_boxes, out_classes, class_names, colors):
     
-    # print(image.size)
-    # print(colors)
-    # print(out_boxes)
-    font = ImageFont.truetype(font='font/FiraMono-Medium.otf',size=2)#np.floor(3e-2 * image.size[1] + 0.5).astype('int32'))
-    thickness = 2 #(image.size[0] + image.size[1]) // 300
+    thickness = 2 
     
-
     for i, c in reversed(list(enumerate(out_classes))):
         predicted_class = class_names[c]
         box = out_boxes[i]
         score = out_scores[i]
-
+        
         label = '{} {:.2f}'.format(predicted_class, score)
         
-        #cv2.line(image, (box[0],box[2]),(box[1],box[3]), colors[c], thickness)
-        #cv2.putText(frame, "test!",(105, 105),cv2.FONT_HERSHEY_COMPLEX_SMALL,.7,(225,0,0))
-        '''
-        draw = ImageDraw.Draw(image)
-        label_size = draw.textsize(label, font)
+        cv2.rectangle(image,(box[3],box[2]),(box[1],box[0]),colors[c],thickness)
+        
+        cv2.putText(image, label,(box[1],box[0]),cv2.FONT_HERSHEY_COMPLEX_SMALL,1,(225,0,0))
 
-        top, left, bottom, right = box
-        top = max(0, np.floor(top + 0.5).astype('int32'))
-        left = max(0, np.floor(left + 0.5).astype('int32'))
-        bottom = min(image.size[1], np.floor(bottom + 0.5).astype('int32'))
-        right = min(image.size[0], np.floor(right + 0.5).astype('int32'))
-        print(label, (left, top), (right, bottom))
-
-        if top - label_size[1] >= 0:
-            text_origin = np.array([left, top - label_size[1]])
-        else:
-            text_origin = np.array([left, top + 1])
-
-        # My kingdom for a good redistributable image drawing library.
-        for i in range(thickness):
-            draw.rectangle([left + i, top + i, right - i, bottom - i], outline=colors[c])
-        draw.rectangle([tuple(text_origin), tuple(text_origin + label_size)], fill=colors[c])
-        draw.text(text_origin, label, fill=(0, 0, 0), font=font)
-        del draw
-        '''
-    #return image
-# =======================================
 #%%
